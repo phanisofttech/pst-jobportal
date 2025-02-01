@@ -1,0 +1,32 @@
+.title-container {
+	 text-align: center;
+    font-size: 85px;
+    font-family: fantasy;
+    background: aliceblue;
+}
+.nav-bar {
+	background-color: darkgray;
+}
+
+.nav-bar ul {
+	display: inline-flex;
+	list-style: none;
+}
+
+.nav-bar ul li{
+	margin-right: 60px;
+}
+
+.nav-bar ul li a{
+	text-decoration: none;
+	color: white;
+	font-weight: bolder;
+	font-size: 17px;
+	font-family: monospace;
+}
+
+.nav-bar ul li a:hover {
+	color: black;
+}
+
+

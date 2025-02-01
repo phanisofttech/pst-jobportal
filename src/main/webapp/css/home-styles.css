@@ -1,0 +1,33 @@
+@charset "ISO-8859-1";
+
+
+.home-body {
+	display: flex;
+}
+
+.home-left-body {
+	flex: 30%;
+	padding: 10px;
+}
+.home-right-body {
+	flex: 70%;
+	padding: 10px;
+}
+
+.company-home-body .page-title {
+	text-align: center;
+    font-size: 35px;
+    font-family: monospace;
+    font-weight: bold;
+    color: darkblue;
+}
+
+.home-right-body .job-list {
+	
+	background-color: aqua;
+	width: auto;
+	border: 1px solid black;
+    padding: 60px;
+    margin-bottom: 10px;
+	
+}
