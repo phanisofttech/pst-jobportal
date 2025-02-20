@@ -34,8 +34,10 @@ public class LoginController extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("admin_home.jsp");
 			dispatcher.forward(request, response);
 		}else if(dto != null && !dto.getName().equals("") && dto.getRoleName().equals("user")) {
-			dispatcher = request.getRequestDispatcher("user_home.jsp");
-			dispatcher.forward(request, response);
+//			request.setAttribute("action", "userHome");
+//			dispatcher = request.getRequestDispatcher("./UserController");
+//			dispatcher.forward(request, response);
+			response.sendRedirect("./UserController?action=userHome&userId="+dto.getUserId());
 		} else if(dto != null && !dto.getName().equals("") && dto.getRoleName().equals("company")) {
 			//dispatcher = request.getRequestDispatcher("./JobController");
 			//dispatcher.forward(request, response);

@@ -1,3 +1,4 @@
+<%@page import="com.pst.jobportal.dto.JobDto"%>
 <%@page import="com.pst.jobportal.dto.UserDto"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -9,7 +10,7 @@
 .job-form {
   border-radius: 5px;
   background-color: #f2f2f2;
-  padding: 5% 10% 10% 10%;;
+  padding: 5% 10% 10% 10%;
 }
 
 input[type=text],input[type=date], textarea {
@@ -22,9 +23,25 @@ input[type=text],input[type=date], textarea {
   box-sizing: border-box;
 }
 
-input[type=submit] {
-  width: 100%;
+.btn-primary {
+  width: 50%;
   background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #45a049;
+}
+
+.btn-warning {
+  width: 50%;
+  background-color: #dc3545;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -33,21 +50,31 @@ input[type=submit] {
   cursor: pointer;
 }
 
-input[type=submit]:hover {
+.btn-warning:hover {
   background-color: #45a049;
+}
+
+.btn-group {
+ display: flex;
+}
+
+.btn-group input{
+ padding: 10px;
 }
   
 
 
 </style>
 <meta charset="ISO-8859-1">
-<title>New Job</title>
+<title>Update Job</title>
 <link rel="stylesheet" href="css/home-styles.css" />
 </head>
 <body>
 
   <%
       UserDto user = (UserDto)session.getAttribute("user");
+  
+      JobDto dto = (JobDto) request.getAttribute("jobDto");
   %>
 
  <div class="container">
@@ -60,7 +87,7 @@ input[type=submit]:hover {
 		</div>
 
 		<div class="company-home-body">
-		   <div class="page-title"> Add New Job </div>
+		   <div class="page-title"> Update Job </div>
 		   <div class="job-form">
 		   	
 		   	 <form action="./JobController" method="post">
@@ -68,24 +95,32 @@ input[type=submit]:hover {
 		   	 	<label for="cname">Company Name</label>
 			    <input type="text" id="cname" disabled="disabled" value="<%=user.getCompanyName()%>"/>
 			    <input type="hidden" name="companyId" value="<%=user.getCompanyId()%>"/>
-			    <input type="hidden" name="action" value="create-form"/>
+		   	 
+		   	 	 <label for="jId">Job Id</label>
+			     <input disabled="disabled" type="text" id="jId" value="<%=dto.getJobId()%>">
+			     <input type="hidden" name="jobId" value="<%=dto.getJobId()%>">
 		   	 
 			    <label for="jname">Job Name</label>
-			    <input type="text" id="jname" name="jobName" placeholder="Job name..">
+			    <input type="text" id="jname" name="jobName" value="<%=dto.getJobName()%>">
 			
 			    <label for="jType">Job Type</label>
-			    <input type="text" id="jType" name="jobType" placeholder="Job Type..">
+			    <input type="text" id="jType" name="jobType" value="<%=dto.getJobType()%>">
 			    
 			    <label for="date">Date</label>
-			    <input type="date" id="date" name="dateOfPosting" placeholder="Date Of Posting">
+			    <input type="date" id="date" name="dateOfPosting" value="<%=dto.getDateOfPosting()%>">
 			    
 			    <label for="exdate">Expire Date</label>
-			    <input type="date" id="exdate" name="expireDate" placeholder="Expire Date">
+			    <input type="date" id="exdate" name="expireDate" value="<%=dto.getExpireDate()%>">
 			
 			    <label for="jobDescription">Job Description</label>
-			    <textarea rows="10" cols="10" id="jobDescription" name="jobDescription"></textarea>
-			  
-			    <input type="submit" value="Post Job">
+			    <textarea rows="10" cols="10" id="jobDescription" name="jobDescription"><%=dto.getJobDescription() %></textarea>
+			    <input type="hidden" name="action" value="update-form"/>
+			    
+			    
+			  	<div class="btn-group">
+			    <input class="btn-primary" type="submit" value="Update Job">
+			    <input class="btn-warning" type="reset" value="Clear">
+			    </div>
   			</form>
 		   
 		   </div>

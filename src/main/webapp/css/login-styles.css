@@ -36,22 +36,6 @@
     font-size: 15px;
 }
 
-.home-body {
-	height: 76vh;
-}
-
-.home-left-body {
-	overflow: scroll;
-}
-
-.home-left-body::-webkit-scrollbar {
-	display: none;
-}
-
-#job-image {
-	width: 90%;
-}
-
 .home-right-body .login-form .validation-message {
 	color: red;
 }

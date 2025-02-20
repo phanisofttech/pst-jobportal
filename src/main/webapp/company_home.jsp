@@ -1,3 +1,4 @@
+<%@page import="com.pst.jobportal.dto.UserDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.pst.jobportal.dto.JobDto"%>
 <%@page import="java.util.List"%>
@@ -12,6 +13,10 @@
 
 <body>
 
+    <%
+        UserDto user = (UserDto)session.getAttribute("user");
+    %>
+
 	<div class="container"> 
 
 	<div>
@@ -23,7 +28,7 @@
 
 		<div class="company-home-body">
 		    
-		     <h1> Welcome to Company Name</h1>
+		     <h1 style="text-align: center"> Welcome to <%=user.getCompanyName() %></h1>
 		
 		</div>
 	</div>

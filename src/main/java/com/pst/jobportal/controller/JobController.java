@@ -22,32 +22,88 @@ import com.pst.jobportal.vo.JobVo;
  */
 public class JobController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private String message = "";
+	private String color = "";
 	
 	private JobService service = new JobService();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		HttpSession session = request.getSession();
+		RequestDispatcher dispatcher = null;
+		String action = request.getParameter("action");
 		
-		UserDto user = (UserDto)session.getAttribute("user");
-		
-		String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
-		String color = request.getParameter("color") == null ? "" : request.getParameter("color");
-		
-		int companyId = user.getCompanyId();
-		
-		
-		List<JobDto> list = service.getJobsByCompanyId(companyId);
-		request.setAttribute("jobList", list);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./jobs.jsp?msg="+msg+"&color:"+color);
-		dispatcher.forward(request, response);	
+		if(action != null && (action.equals("update") || action.equals("view"))) {
+			  // update flow, getting data based on job id and display update job jsp file
+			int jobId = Integer.parseInt(request.getParameter("jobId"));
+			JobDto dto = service.getJob(jobId);
+			System.out.println("job name: "+ dto.getJobName());
+			request.setAttribute("jobDto", dto);
+			
+			if(action.equals("update")) {
+				dispatcher = request.getRequestDispatcher("update_job.jsp");
+			} else if(action.equals("view")) {
+				dispatcher = request.getRequestDispatcher("view_job.jsp");
+			}
+			
+			dispatcher.forward(request, response);
+			
+		} else if(action != null && (action.equals("delete"))) {
+			// Delete Flow
+			int jobId = Integer.parseInt(request.getParameter("jobId"));
+			int i = service.deleteJob(jobId);
+			if(i > 0) {
+		    	message = "Job Deleted Successfully";
+		    	color = "green";
+		    }else {
+		    	message = "Job Deletion failed";
+		    	color = "red";
+		    }
+			response.sendRedirect("./UserController?message="+message+"&color="+color);
+			
+		}else if(action != null && action.equals("applyJob")){
+			HttpSession session = request.getSession();
+			UserDto user = (UserDto)session.getAttribute("user");
+			
+			
+			int jobId = Integer.parseInt(request.getParameter("jobId"));
+			
+			int userId = user.getUserId();
+			int i = service.applyJob(userId, jobId);
+			if(i > 0) {
+				message = "Job applied successfully";
+				color = "green";
+			} else {
+				message = "Internal Error, Please try again";
+				color = "red";
+			}
+			response.sendRedirect("./UserController?msg="+message+"&color="+color+"&action=userHome&userId="+userId);
+			
+		}
+		else {
+			// list of jobs flow
+			HttpSession session = request.getSession();
+			
+			UserDto user = (UserDto)session.getAttribute("user");
+			
+			String msg = request.getParameter("msg") == null ? "" : request.getParameter("msg");
+			String color = request.getParameter("color") == null ? "" : request.getParameter("color");
+			
+			int companyId = user.getCompanyId();
+			
+			
+			List<JobDto> list = service.getJobsByCompanyId(companyId);
+			request.setAttribute("jobList", list);
+			dispatcher = request.getRequestDispatcher("./jobs.jsp?msg="+msg+"&color:"+color);
+			dispatcher.forward(request, response);	
+		}
 	}
 	
 	@Override
 		protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			String message = "";
-			String color = "";
-		    int companyId = Integer.parseInt(req.getParameter("companyId"));
+			int i = 0;
+			String action = req.getParameter("action");
+			
+		    int companyId = action.equals("create-form") ? Integer.parseInt(req.getParameter("companyId")) : 0;
+		    int jobId = action.equals("update-form") ? Integer.parseInt(req.getParameter("jobId")) : 0;
 		    String jobName = req.getParameter("jobName");
 		    String jobType = req.getParameter("jobType");
 		    String dateOfPosting = req.getParameter("dateOfPosting");
@@ -64,19 +120,32 @@ public class JobController extends HttpServlet {
 		    vo.setExpireDate(expireDate);
 		    vo.setDescription(description);
 		    
-		    // calling service method
-		    int i = service.createNewJob(vo);
-		    if(i > 0) {
-		    	message = "Job successfully inserted";
-		    	color = "green";
-		    }else {
-		    	message = "Job insertion failed";
-		    	color = "red";
+		    if(action.equals("create-form")) {
+		    	i = service.createNewJob(vo);
+		    	if(i > 0) {
+			    	message = "Job successfully inserted";
+			    	color = "green";
+			    }else {
+			    	message = "Job insertion failed";
+			    	color = "red";
+			    }
+		    } else {
+		    	// call update method in service
+		    	i = service.updateJob(vo, jobId);
+		    	
+		    	if(i > 0) {
+			    	message = "Job Updated Successfully";
+			    	color = "green";
+			    }else {
+			    	message = "Job Updation failed";
+			    	color = "red";
+			    }
 		    }
 		    
-//		    resp.sendRedirect("./jobs.jsp?msg="+message+"&color="+color);
+		    
 		    resp.sendRedirect("./JobController?msg="+message+"&color="+color);
-		
 		}
+	
+	
 
 }

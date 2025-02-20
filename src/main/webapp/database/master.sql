@@ -33,3 +33,13 @@ job_description varchar(50),
 company_id int(10),
 FOREIGN KEY(company_id) REFERENCES COMPANY(company_id)
 );
+
+create table ACCOUNT_JOB_APPLY(
+id int primary key AUTO_INCREMENT,
+account_id int(6),
+job_id int(6),
+date_of_apply date,
+FOREIGN KEY(account_id) REFERENCES ACCOUNT(account_id),
+FOREIGN KEY(job_id) REFERENCES JOB(job_id)
+);
+

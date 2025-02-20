@@ -11,7 +11,7 @@
 	<div class="nav-bar">
 	
 		<ul>
-		    <li><a href="home.jsp">Home</a></li>
+		    <li><a href="./UserController">Home</a></li>
 		    <li><a href="login.jsp">Login</a></li>
 		    <li><a href="">About Us</a></li>
 		    <li><a href="">Contact Us</a></li>
